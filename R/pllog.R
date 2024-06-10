@@ -1,7 +1,5 @@
 #########################################
-## Jared Studyvin
-## 8 Dec 2016
-## pllog - documentation is in dllog
+## documentation is in dllog
 #########################################
 
 

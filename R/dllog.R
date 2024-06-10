@@ -1,8 +1,3 @@
-####################################
-## Jared Studyvin
-## 8 Dec 2016
-## dllog
-####################################
 
 #'
 #' @name LogLogistic
@@ -61,6 +56,32 @@
 
 dllog <- function(x, shape = 1, scale = 1, log = FALSE,...){
 
+
+################################################
+### argument checking
+
+
+    if(!is.logical(log)|length(log)!=1){
+        stop('Argument log must be a single logical value.')
+    }#end if
+
+
+    if(!is.numeric(x)){
+        stop('Argument x must be numeric.')
+    } #end if
+
+    if(!is.numeric(shape)){
+        stop('Argument shape must be numeric.')
+    } #end if
+
+    if(!is.numeric(scale)){
+        stop('Argument scale must be numeric.')
+    } #end if
+
+
+#################################################
+
+    
 
     logX <- suppressWarnings(log(x))
 

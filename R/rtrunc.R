@@ -17,10 +17,10 @@
 #' @examples
 #'
 #' ## rtrunc
-#' rtrunc(n=5, distribution = 'gamma', tbound=c(2,5),shape=3,rate=2)
+#' rtrunc(n=5, distr = 'gamma', shape=3, rate=2, low=2, high=5)
 
 
-rtrunc <- function (n, distribution, tbound = c(-Inf,Inf), ...){
+rtrunc <- function (n, distr, ..., low=-Inf, high=Inf){
 
 ################################################
 ### argument checking
@@ -40,16 +40,20 @@ rtrunc <- function (n, distribution, tbound = c(-Inf,Inf), ...){
 
 ################################################
 
-    ## account for vectors
+    tbound <- c(as.vector(low),as.vector(high))
+
+
+    ## get truncation bounds
     low <- min(tbound,na.rm=TRUE)
     high <- max(tbound,na.rm=TRUE)
 
-    if (low >= high){
-        stop("argument lowBound is greater than or equal to highBound")
+
+    if (low == high){
+        stop("Arguments low and high must not be the same value")
     }# end if
 
     randUnif <- stats::runif(n, min = 0, max = 1)
-    out <- qtrunc(p=randUnif, distribution=distribution, tbound=c(low, high), ...)
+    out <- qtrunc(p=randUnif, distr=distr, ..., low=low, high=high)
 
 
     return(out)

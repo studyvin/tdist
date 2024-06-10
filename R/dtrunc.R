@@ -15,7 +15,7 @@
 #' @param q Vector of quantiles.
 #' @param p Vector of probabilities.
 #' @param n A positive integer specifying the desired number of random variates.
-#' @param distribution Character value specifying the desired probability distribution.
+#' @param distr Character value specifying the desired probability distribution.
 #' @param tbound Numeric vector specifying the lower and upper truncation bounds. Default is \code{c(-Inf, Inf)}.
 #' @param ... Additional arguments passed to the non-truncated distribution functions.
 #' @param log Logical; if TRUE, log densities are returned.
@@ -36,26 +36,31 @@
 #' ## dtrunc
 #' # not truncted
 #' dnorm(5,mean=5)
+#' dtrunc(x=5,distribution='norm',mean=5)
 #' # truncated
-#' dtrunc(x=5,distribution='norm',tbound=c(4,5.5),mean=5)
+#' dtrunc(x=5,distribution='norm',mean=5,low=4, high=5.5)
 #'
 #'
 
 
-dtrunc <- function(x, distribution, tbound=c(-Inf, Inf), ...,log=FALSE){
+dtrunc <- function(x, distribution, ..., low=-Inf, high=Inf,log=FALSE){
 ##print('dtrunc:');print(as.list(match.call()))
 
 ##############################################
 ### argument checking
-    if(!is.character(distribution)|length(distribution)!=1){
+    if(!is.character(distr)|length(distr)!=1){
         stop('argument distribution must be a single character string')
     }
 
-    if(!is.numeric(tbound)){
-        stop('arguments lowBound and highBound need to be numeric')
+    if(!is.numeric(high)){
+        stop('argument high needs to be numeric')
     } #end if
 
+    if(!is.numeric(low)){
+        stop('argument low needs to be numeric')
+    } #end if
 
+    
     if(!is.logical(log)|length(log)!=1){
         stop('Argument log must be a single logical value.')
     }#
@@ -68,6 +73,7 @@ dtrunc <- function(x, distribution, tbound=c(-Inf, Inf), ...,log=FALSE){
 
 ###############################################
 
+    tbound <- c(as.vector(low),as.vector(high))
 
 
     ## get truncation bounds
@@ -76,11 +82,11 @@ dtrunc <- function(x, distribution, tbound=c(-Inf, Inf), ...,log=FALSE){
 
 
     if (low == high){
-        stop("argument tbound must be a vector of at least two elements that are not the same")
+        stop("arguments low and high must not be the same value")
     }# end if
 
-    pNonTrunc <- getDistributionFunction(type='p',dist=distribution)##get(paste("p", distribution, sep = ""), mode = "function")
-    dNonTrunc <- getDistributionFunction(type='d',dist=distribution)##get(paste("d", distribution, sep = ""), mode = "function")
+    pNonTrunc <- getDistributionFunction(type='p',distr=distr)##get(paste("p", distr, sep = ""), mode = "function")
+    dNonTrunc <- getDistributionFunction(type='d',distr=distr)##get(paste("d", distr, sep = ""), mode = "function")
 
     ## for testing
     ##pLow <- pNonTrunc(low,shape=3,rate=2,lower.tail=FALSE)

@@ -12,19 +12,21 @@
 #'
 #' ## ptrunc
 #' #not truncated
-#' pgamma(2,shape=3,rate=2)
+#' pgamma(2, shape=3, rate=2)
+#' ptrunc(2, distr = 'gamma', shape=3, rate=2)
 #' # truncated
-#' ptrunc(2, distribution = 'gamma', tbound=c(1,5),shape=3,rate=2)
+#' ptrunc(2, distr = 'gamma', shape=3, rate=2, low=1, high=5)
 #'
 #' ## upper tail
 #' # not truncated
-#' pgamma(2,shape=3,rate=2,lower.tail=FALSE)
+#' pgamma(2, shape=3, rate=2,lower.tail=FALSE)
+#' ptrunc(2, distr='gamma', shape=3, rate=2, lower.tail=FALSE)
 #' # truncated
-#' ptrunc(2,distribution='gamma',tbound=c(1,5),shape=3,rate=2,lower.tail=FALSE)
+#' ptrunc(2, distr='gamma', shape=3, rate=2, low=1, high=5, lower.tail=FALSE)
+#'
+#' 
 
-
-
-ptrunc <- function(q, distribution, tbound = c(-Inf, Inf),...,lower.tail=TRUE,log.p=NULL){
+ptrunc <- function(q, distr,...,low=-Inf, high=Inf,lower.tail=TRUE,log.p=NULL){
 
     ## for testing
     ##q <- c(2);distribution <- 'gamma';tbound <- c(1,5)
@@ -43,27 +45,42 @@ ptrunc <- function(q, distribution, tbound = c(-Inf, Inf),...,lower.tail=TRUE,lo
     } #end if
 
 
-    if(!is.character(distribution)||length(distribution)!=1){
-        stop('Argument distribution must be a single character string.')
+    if(!is.character(distr)||length(distr)!=1){
+        stop('Argument distr must be a single character string.')
     }
+
+    if(!is.numeric(high)){
+        stop('Argument high needs to be numeric')
+    } #end if
+
+    if(!is.numeric(low)){
+        stop('Argument low needs to be numeric')
+    } #end if
+
 
     if(!is.numeric(tbound)){
         stop('Argument tbound must be numeric.')
     } #end if
 
+    
 ############################################################
 
-    ## truncation bounds
-    (low <- min(tbound,na.rm=TRUE))
-    (high <- max(tbound,na.rm=TRUE))
 
+    tbound <- c(as.vector(low),as.vector(high))
+
+
+    ## get truncation bounds
+    low <- min(tbound,na.rm=TRUE)
+    high <- max(tbound,na.rm=TRUE)
 
     if (low == high){
-        stop("Argument tbound must be a vector of at least two elements that are not the same")
+        stop("Arguments low and high must not be the same value")
     }# end if
 
-    pNonTrunc <- getDistributionFunction(type='p',dist=distribution)##get(paste("p", distribution, sep = ""), mode = "function")
-    qNonTrunc <- getDistributionFunction(type='q',dist=distribution)##get(paste("q", distribution, sep = ""), mode = "function")
+
+    
+    pNonTrunc <- getDistributionFunction(type='p',distr=distr)##get(paste("p", distr, sep = ""), mode = "function")
+    qNonTrunc <- getDistributionFunction(type='q',distr=distr)##get(paste("q", distr, sep = ""), mode = "function")
 
     ## for testing
     ##(pLow <- pnorm(low,mean=xbar,sd=stdev,lower.tail=FALSE))
