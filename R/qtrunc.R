@@ -25,7 +25,7 @@
 #' qtrunc(p=.975, distr='norm', low=0, high=1, lower.tail=FALSE)
 
 
-qtrunc <- function(p, distr, ..., low=-Inf, high=Inf, lower.tail=TRUE,log.p=NULL){
+qtrunc <- function(p, distr, ..., low=-Inf, high=Inf, lower.tail=TRUE,log.p=FALSE){
 
 ###################################################
 ## argument checking

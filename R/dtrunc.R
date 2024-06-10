@@ -16,8 +16,9 @@
 #' @param p Vector of probabilities.
 #' @param n A positive integer specifying the desired number of random variates.
 #' @param distr Character value specifying the desired probability distribution.
-#' @param tbound Numeric vector specifying the lower and upper truncation bounds. Default is \code{c(-Inf, Inf)}.
 #' @param ... Additional arguments passed to the non-truncated distribution functions.
+#' @param low Numeric value specifying the lower truncation bound.
+#' @param high Numeric value specifying the upper truncation bound. 
 #' @param log Logical; if TRUE, log densities are returned.
 #' @param lower.tail Logical; if TRUE (default), probabilities are P(X <= x) otherwise, P(X > x).
 #' @param log.p Currently ignored.
@@ -25,7 +26,8 @@
 #'
 #' @details The non truncated distribution functions are assumed to be available. For example if the normal distribution is desired then used \code{distribution='norm'}, the functions then look for 'qnorm', 'pnorm', etc.
 #'
-#' The \code{max(tbound)} and \code{min(tbound)} are considered the upper and lower truncation bounds, respectively.
+#' The truncation interval is (low, high], which only matters for discrete distribution. 
+#' 
 #'
 #' @return \code{dtrunc} returns a vector of densities.
 #'
@@ -43,7 +45,7 @@
 #'
 
 
-dtrunc <- function(x, distribution, ..., low=-Inf, high=Inf,log=FALSE){
+dtrunc <- function(x, distr, ..., low=-Inf, high=Inf,log=FALSE){
 ##print('dtrunc:');print(as.list(match.call()))
 
 ##############################################
@@ -106,7 +108,7 @@ dtrunc <- function(x, distribution, ..., low=-Inf, high=Inf,log=FALSE){
     out <- dNonTrunc(x,...)/(pHigh-pLow)
 
     ## make value zero when outside the truncation bounds
-    out[x<low | x>high] <- 0
+    out[x<=low | x>high] <- 0
 
 
     if(log){

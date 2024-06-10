@@ -26,7 +26,7 @@
 #'
 #' 
 
-ptrunc <- function(q, distr,...,low=-Inf, high=Inf,lower.tail=TRUE,log.p=NULL){
+ptrunc <- function(q, distr,...,low=-Inf, high=Inf,lower.tail=TRUE,log.p=FALSE){
 
     ## for testing
     ##q <- c(2);distribution <- 'gamma';tbound <- c(1,5)
@@ -58,11 +58,6 @@ ptrunc <- function(q, distr,...,low=-Inf, high=Inf,lower.tail=TRUE,log.p=NULL){
     } #end if
 
 
-    if(!is.numeric(tbound)){
-        stop('Argument tbound must be numeric.')
-    } #end if
-
-    
 ############################################################
 
 

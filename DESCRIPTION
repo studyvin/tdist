@@ -11,4 +11,4 @@ Imports:
 Maintainer: Jared Studyvin <studyvinstat@gmail.com>
 Description: Truncation of univariate probability distributions. The probability distribution can come from other packages so long as the function names follow the standard d, p, q, r naming format. 
 License: GNU General Public License
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.1
